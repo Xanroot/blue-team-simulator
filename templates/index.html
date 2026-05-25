@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ATT&CK STORY MODE</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<h1>🛡️ ATT&CK STORY MODE 🛡️</h1>
+
+<div class="dashboard">
+
+    <div class="dashboard-card">
+
+        <h2>12</h2>
+
+        <p>Active Alerts</p>
+
+    </div>
+
+    <div class="dashboard-card">
+
+        <h2>3</h2>
+
+        <p>Critical Incidents</p>
+
+    </div>
+
+    <div class="dashboard-card">
+
+        <h2>6</h2>
+
+        <p>Affected Hosts</p>
+
+    </div>
+
+    <div class="dashboard-card">
+
+        <h2>{{ stories|length }}</h2>
+
+        <p>Attack Stories</p>
+
+    </div>
+
+</div>
+
+<h2>🎮 Case Progression</h2>
+
+<div class="unlock-info">
+
+    Gain XP during investigations
+    to unlock advanced incidents.
+
+</div>
+
+<div class="cases-grid">
+
+    {% for story in stories %}
+
+        <div class="card case-card">
+
+            <h2>{{ story.title }}</h2>
+
+            <p>{{ story.description }}</p>
+
+            {% if story.id == 2 or story.id == 5 or story.id == 6 %}
+
+                <div class="critical-badge">
+
+                    🚨 Critical Incident
+
+                </div>
+
+            {% else %}
+
+                <p>
+
+                    Severity:
+
+                    <span class="severity {{ story.severity }}">
+
+                        {{ story.severity }}
+
+                    </span>
+
+                </p>
+
+            {% endif %}
+
+            {% if story.id == 1 %}
+
+                <a href="/story/{{ story.id }}?xp=0">
+
+                    Investigate →
+
+                </a>
+
+            {% else %}
+
+                <button
+                    class="locked-btn"
+                    onclick="unlockCase('{{ story.id }}')">
+
+                    🔒 Locked Incident
+
+                </button>
+
+            {% endif %}
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<script>
+
+function unlockCase(caseId) {
+
+    let userXP =
+        localStorage.getItem(
+            "soc_xp"
+        );
+
+    if (!userXP) {
+
+        userXP = 0;
+
+    }
+
+    userXP =
+        parseInt(userXP);
+
+    if (caseId == 2 && userXP >= 50) {
+
+        window.location.href =
+            "/story/" +
+            caseId +
+            "?xp=" +
+            userXP;
+
+    }
+
+    else if (
+        caseId == 3 &&
+        userXP >= 100
+    ) {
+
+        window.location.href =
+            "/story/" +
+            caseId +
+            "?xp=" +
+            userXP;
+
+    }
+
+    else if (
+        caseId == 4 &&
+        userXP >= 150
+    ) {
+
+        window.location.href =
+            "/story/" +
+            caseId +
+            "?xp=" +
+            userXP;
+
+    }
+
+    else if (
+        caseId == 5 &&
+        userXP >= 200
+    ) {
+
+        window.location.href =
+            "/story/" +
+            caseId +
+            "?xp=" +
+            userXP;
+
+    }
+
+    else if (
+        caseId == 6 &&
+        userXP >= 250
+    ) {
+
+        window.location.href =
+            "/story/" +
+            caseId +
+            "?xp=" +
+            userXP;
+
+    }
+
+    else {
+
+        alert(
+            "🔒 Incident Locked\n\n" +
+            "Earn more XP to unlock this case."
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

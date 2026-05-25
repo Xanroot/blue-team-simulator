@@ -1,0 +1,296 @@
+[
+    {
+        "id": 1,
+        "title": "Phishing to PowerShell Attack",
+        "description": "Malicious attachment leads to PowerShell execution and persistence.",
+        "severity": "High",
+
+        "timeline": [
+
+            {
+                "step": "User receives phishing email",
+                "mitre": "T1566",
+                "tactic": "Initial Access",
+                "detection": "Email gateway alert",
+                "alert": "Suspicious Email Attachment",
+                "host": "USER-LAPTOP01",
+
+                "process_tree": [
+                    "OUTLOOK.EXE",
+                    "WINWORD.EXE",
+                    "powershell.exe"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "1",
+                    "image": "powershell.exe",
+                    "parent_image": "WINWORD.EXE",
+                    "command_line": "powershell.exe -enc SQBmACg..."
+                },
+
+                "question": {
+
+                    "text": "What should analyst do next?",
+
+                    "options": [
+                        "Mark As Benign",
+                        "Isolate Host",
+                        "Collect More Logs"
+                    ],
+
+                    "correct_answer": "Isolate Host",
+
+                    "success_message": "Host isolated successfully.",
+
+                    "failure_message": "Attacker established persistence."
+
+                }
+            }
+        ]
+    },
+
+    {
+        "id": 2,
+        "title": "Privilege Escalation Detected",
+        "description": "Suspicious user added to Administrators group.",
+        "severity": "High",
+
+        "timeline": [
+
+            {
+                "step": "User added to Administrators group",
+                "mitre": "T1098",
+                "tactic": "Privilege Escalation",
+                "detection": "Windows Event ID 4728",
+                "alert": "Suspicious Group Modification",
+                "host": "SERVER-01",
+
+                "process_tree": [
+                    "cmd.exe",
+                    "net.exe"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "4728",
+                    "image": "net.exe",
+                    "parent_image": "cmd.exe",
+                    "command_line": "net localgroup administrators attacker /add"
+                },
+
+                "question": {
+
+                    "text": "What should analyst do next?",
+
+                    "options": [
+                        "Monitor Activity",
+                        "Remove User From Group",
+                        "Restart Server"
+                    ],
+
+                    "correct_answer": "Remove User From Group",
+
+                    "success_message": "Unauthorized privilege escalation reverted.",
+
+                    "failure_message": "Attacker retained elevated privileges."
+
+                }
+            }
+        ]
+    },
+
+    {
+        "id": 3,
+        "title": "SSH Brute Force Attack",
+        "description": "Multiple failed SSH logins followed by successful authentication.",
+        "severity": "Medium",
+
+        "timeline": [
+
+            {
+                "step": "Multiple SSH failures detected",
+                "mitre": "T1110",
+                "tactic": "Credential Access",
+                "detection": "Linux auth.log monitoring",
+                "alert": "SSH Brute Force Detected",
+                "host": "LINUX-WEB01",
+
+                "process_tree": [
+                    "sshd",
+                    "bash"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "SSH",
+                    "image": "sshd",
+                    "parent_image": "systemd",
+                    "command_line": "Failed password for root from 185.x.x.x"
+                },
+
+                "question": {
+
+                    "text": "What should analyst do next?",
+
+                    "options": [
+                        "Monitor Login Attempts",
+                        "Block Source IP",
+                        "Disable Logging"
+                    ],
+
+                    "correct_answer": "Block Source IP",
+
+                    "success_message": "Brute force source blocked successfully.",
+
+                    "failure_message": "Attacker continued password spraying."
+
+                }
+            }
+        ]
+    },
+
+    {
+        "id": 4,
+        "title": "Suspicious Kali Tool Usage",
+        "description": "Reconnaissance and offensive tooling detected on endpoint.",
+        "severity": "High",
+
+        "timeline": [
+
+            {
+                "step": "Nmap scan detected on internal subnet",
+                "mitre": "T1046",
+                "tactic": "Discovery",
+                "detection": "EDR process monitoring",
+                "alert": "Suspicious Reconnaissance Activity",
+                "host": "WORKSTATION-07",
+
+                "process_tree": [
+                    "bash",
+                    "nmap"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "1",
+                    "image": "nmap.exe",
+                    "parent_image": "bash.exe",
+                    "command_line": "nmap -sS 10.0.0.0/24"
+                },
+
+                "question": {
+
+                    "text": "What should analyst do next?",
+
+                    "options": [
+                        "Ignore Internal Scanning",
+                        "Investigate Endpoint",
+                        "Close Alert As Informational"
+                    ],
+
+                    "correct_answer": "Investigate Endpoint",
+
+                    "success_message": "Potential attacker activity investigated successfully.",
+
+                    "failure_message": "Reconnaissance activity continued undetected."
+
+                }
+            }
+        ]
+    },
+
+    {
+        "id": 5,
+        "title": "DCSync Credential Replication Attack",
+        "description": "Suspicious Active Directory replication activity detected from compromised account.",
+        "severity": "High",
+
+        "timeline": [
+
+            {
+                "step": "Attacker initiated DCSync request",
+                "mitre": "T1003.006",
+                "tactic": "Credential Access",
+                "detection": "Active Directory replication monitoring",
+                "alert": "Potential DCSync Activity",
+                "host": "DC01",
+
+                "process_tree": [
+                    "powershell.exe",
+                    "mimikatz.exe"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "4662",
+                    "image": "mimikatz.exe",
+                    "parent_image": "powershell.exe",
+                    "command_line": "lsadump::dcsync /domain:corp.local"
+                },
+
+                "question": {
+
+                    "text": "What should analyst do next?",
+
+                    "options": [
+                        "Restart Domain Controller",
+                        "Disable Compromised Account",
+                        "Ignore Replication Traffic"
+                    ],
+
+                    "correct_answer": "Disable Compromised Account",
+
+                    "success_message": "Compromised account disabled successfully.",
+
+                    "failure_message": "Attacker replicated domain credentials."
+
+                }
+            }
+        ]
+    },
+
+    {
+        "id": 6,
+        "title": "Ransomware Outbreak Detected",
+        "description": "Multiple hosts showing encryption activity and ransom note creation.",
+        "severity": "High",
+
+        "timeline": [
+
+            {
+                "step": "Mass file encryption activity detected",
+                "mitre": "T1486",
+                "tactic": "Impact",
+                "detection": "EDR ransomware behavior analytics",
+                "alert": "Potential Ransomware Activity",
+                "host": "FILESERVER01",
+
+                "process_tree": [
+                    "powershell.exe",
+                    "encryptor.exe"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "1",
+                    "image": "encryptor.exe",
+                    "parent_image": "powershell.exe",
+                    "command_line": "encryptor.exe --encrypt C:\\Shares"
+                },
+
+                "question": {
+
+                    "text": "What should analyst do next?",
+
+                    "options": [
+                        "Shut Down Endpoint",
+                        "Isolate Infected Hosts",
+                        "Collect More Logs"
+                    ],
+
+                    "correct_answer": "Isolate Infected Hosts",
+
+                    "success_message": "Ransomware spread contained successfully.",
+
+                    "failure_message": "Encryption spread across additional hosts."
+
+                }
+            }
+        ]
+    }
+]

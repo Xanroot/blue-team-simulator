@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>{{ story.title }}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="top-bar">
+
+    <div id="xp-box">
+        XP: <span id="xp">0</span>
+    </div>
+
+    <div id="rank-box">
+        Rank: <span id="rank">Tier 1 Analyst</span>
+    </div>
+
+    <div id="threat-box">
+        Threat Score:
+        <span id="threat-score">50%</span>
+    </div>
+
+</div>
+
+<div id="movement-box">
+
+    ⚠ Lateral Movement Detected:
+    Attacker accessed FILESERVER01
+
+</div>
+
+<div id="incident-outcome"></div>
+
+<h1>{{ story.title }}</h1>
+
+<p>{{ story.description }}</p>
+
+<p>
+
+    Severity:
+
+    <span class="severity {{ story.severity }}">
+        {{ story.severity }}
+    </span>
+
+</p>
+
+<h2>Attack Timeline</h2>
+
+{% for item in story.timeline %}
+
+<div class="timeline-card">
+
+    <div class="alert-box">
+
+        <h4>🚨 SOC Alert</h4>
+
+        <p>
+            <strong>{{ item.alert }}</strong>
+        </p>
+
+    </div>
+
+    <h3>{{ item.step }}</h3>
+
+    <p>
+        <strong>Technique:</strong>
+        {{ item.mitre }}
+    </p>
+
+    <p>
+        <strong>Tactic:</strong>
+        {{ item.tactic }}
+    </p>
+
+    <p>
+        <strong>Detection:</strong>
+        {{ item.detection }}
+    </p>
+
+    <p>
+        <strong>Host:</strong>
+        {{ item.host }}
+    </p>
+
+    <div class="process-tree">
+
+        <strong>Process Tree:</strong>
+
+        {% for process in item.process_tree %}
+
+            <p class="process-item">
+                {{ process }}
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="log-box">
+
+        <h4>📄 Detection Log</h4>
+
+        <p>
+            <strong>Event:</strong>
+            {{ item.sysmon_log.event_id }}
+        </p>
+
+        <p>
+            <strong>Image:</strong>
+            {{ item.sysmon_log.image }}
+        </p>
+
+        <p>
+            <strong>Parent:</strong>
+            {{ item.sysmon_log.parent_image }}
+        </p>
+
+        <p>
+            <strong>Command:</strong>
+            {{ item.sysmon_log.command_line }}
+        </p>
+
+    </div>
+
+    <div class="quiz-box">
+
+        <h4>🎯 Analyst Decision</h4>
+
+        <p>
+            {{ item.question.text }}
+        </p>
+
+        {% for option in item.question.options %}
+
+            <button onclick="checkAnswer(
+                this,
+                '{{ option }}',
+                '{{ item.question.correct_answer }}',
+                '{{ item.question.success_message }}',
+                '{{ item.question.failure_message }}'
+            )">
+
+                {{ option }}
+
+            </button>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+<div class="career-box">
+
+    <h2>🧠 Career Progression</h2>
+
+    <div class="career-level">
+        ✔ Tier 1 Analyst
+    </div>
+
+    <div class="career-level" id="tier2">
+        🔒 Tier 2 Analyst
+    </div>
+
+    <div class="career-level" id="hunter">
+        🔒 Threat Hunter
+    </div>
+
+    <div class="career-level" id="responder">
+        🔒 Incident Responder
+    </div>
+
+</div>
+
+<a href="/">← Back</a>
+
+<script>
+
+const currentStoryId =
+    "{{ story.id }}";
+
+let xp =
+    localStorage.getItem("soc_xp");
+
+if (!xp) {
+
+    xp = 0;
+
+}
+
+xp = parseInt(xp);
+
+let requiredXP = 0;
+
+if (currentStoryId == 2) {
+
+    requiredXP = 50;
+
+}
+
+else if (currentStoryId == 3) {
+
+    requiredXP = 100;
+
+}
+
+else if (currentStoryId == 4) {
+
+    requiredXP = 150;
+
+}
+
+else if (currentStoryId == 5) {
+
+    requiredXP = 200;
+
+}
+
+else if (currentStoryId == 6) {
+
+    requiredXP = 250;
+
+}
+
+if (xp < requiredXP) {
+
+    alert(
+        "🔒 Incident Locked\n\n" +
+        "Earn more XP first."
+    );
+
+    window.location.href = "/";
+
+}
+
+let threatScore = 50;
+
+document.getElementById("xp").innerText =
+    xp;
+
+function updateRank() {
+
+    let rank = "Tier 1 Analyst";
+
+    if (xp >= 50) {
+
+        rank = "Tier 2 Analyst";
+
+        document.getElementById("tier2").innerHTML =
+            "✔ Tier 2 Analyst";
+
+    }
+
+    if (xp >= 100) {
+
+        rank = "Threat Hunter";
+
+        document.getElementById("hunter").innerHTML =
+            "✔ Threat Hunter";
+
+    }
+
+    if (xp >= 200) {
+
+        rank = "Incident Responder";
+
+        document.getElementById("responder").innerHTML =
+            "✔ Incident Responder";
+
+    }
+
+    document.getElementById("rank").innerText =
+        rank;
+}
+
+updateRank();
+
+function updateThreatScore() {
+
+    document.getElementById("threat-score").innerText =
+        threatScore + "%";
+
+    checkLateralMovement();
+
+    checkIncidentOutcome();
+
+}
+
+function checkLateralMovement() {
+
+    let movementBox =
+        document.getElementById("movement-box");
+
+    if (threatScore >= 80) {
+
+        movementBox.style.display =
+            "block";
+
+    }
+
+    else {
+
+        movementBox.style.display =
+            "none";
+
+    }
+
+}
+
+function checkIncidentOutcome() {
+
+    let outcome =
+        document.getElementById("incident-outcome");
+
+    if (threatScore >= 100) {
+
+        outcome.style.display =
+            "block";
+
+        outcome.innerHTML =
+            "☠ DOMAIN COMPROMISED<br><br>" +
+            "Ransomware spread detected.<br>" +
+            "5 Hosts encrypted.";
+
+    }
+
+    else if (threatScore <= 10) {
+
+        outcome.style.display =
+            "block";
+
+        outcome.innerHTML =
+            "✅ INCIDENT CONTAINED<br><br>" +
+            "Threat eliminated successfully.";
+
+    }
+
+    else {
+
+        outcome.style.display =
+            "none";
+
+    }
+
+}
+
+function checkAnswer(
+    button,
+    selected,
+    correct,
+    successMessage,
+    failureMessage
+) {
+
+    if (selected === correct) {
+
+        button.style.backgroundColor =
+            "green";
+
+        xp += 50;
+
+        localStorage.setItem(
+            "soc_xp",
+            xp
+        );
+
+        threatScore -= 15;
+
+        if (threatScore < 0) {
+
+            threatScore = 0;
+
+        }
+
+        document.getElementById("xp").innerText =
+            xp;
+
+        updateRank();
+
+        updateThreatScore();
+
+        alert(
+            "✅ " + successMessage +
+            "\n\n+50 XP Earned"
+        );
+
+    }
+
+    else {
+
+        button.style.backgroundColor =
+            "red";
+
+        threatScore += 20;
+
+        if (threatScore > 100) {
+
+            threatScore = 100;
+
+        }
+
+        updateThreatScore();
+
+        alert(
+            "❌ " + failureMessage +
+            "\n\nThreat Score Increased"
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
