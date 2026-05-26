@@ -8,6 +8,14 @@ with open("data/stories.json") as file:
 
 
 @app.route("/")
+def login():
+
+    return render_template(
+        "login.html"
+    )
+
+
+@app.route("/dashboard")
 def home():
 
     return render_template(
@@ -41,7 +49,7 @@ def story(story_id):
 
     if xp < required_xp:
 
-        return redirect("/")
+        return redirect("/dashboard")
 
     selected_story = None
 
@@ -54,7 +62,7 @@ def story(story_id):
 
     if not selected_story:
 
-        return redirect("/")
+        return redirect("/dashboard")
 
     return render_template(
         "story.html",

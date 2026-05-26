@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ATT&CK Story Mode</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="login-body">
+
+<div class="login-container">
+
+    <div class="terminal-header">
+
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+
+        <span class="terminal-title">
+
+            blue_team_access.sh
+
+        </span>
+
+    </div>
+
+    <div class="login-box">
+
+        <h1 class="glow-title">
+
+            ATT&CK Story Mode
+
+        </h1>
+
+        <p class="login-subtitle">
+
+            SOC Access Terminal
+
+        </p>
+
+        <div class="terminal-line">
+
+            > ENTER ANALYST ACCESS KEY
+
+        </div>
+
+        <input
+            type="password"
+            id="access-key"
+            placeholder="••••••••••••">
+
+        <button onclick="authenticate()">
+
+            AUTHENTICATE
+
+        </button>
+
+        <p id="status-text"></p>
+
+    </div>
+
+</div>
+
+<script>
+
+function authenticate() {
+
+    let key =
+        document.getElementById(
+            "access-key"
+        ).value;
+
+    let status =
+        document.getElementById(
+            "status-text"
+        );
+
+    if (key === "blue-team") {
+
+        status.innerHTML =
+            "✅ ACCESS GRANTED";
+
+        status.style.color =
+            "#22c55e";
+
+        setTimeout(() => {
+
+            window.location.href = "/dashboard";
+
+        }, 1500);
+
+    }
+
+    else {
+
+        status.innerHTML =
+            "❌ INVALID ACCESS KEY";
+
+        status.style.color =
+            "#ef4444";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

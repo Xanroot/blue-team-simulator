@@ -236,5 +236,158 @@
             }
 
         ]
+    },
+
+    {
+        "id": 4,
+        "title": "Kali Linux Recon Activity",
+        "description": "Reconnaissance activity detected from attacker machine.",
+        "severity": "High",
+
+        "timeline": [
+
+            {
+                "step": "Network scan detected",
+                "mitre": "T1046",
+                "tactic": "Discovery",
+
+                "tactic_options": [
+                    "Discovery",
+                    "Execution",
+                    "Persistence",
+                    "Impact"
+                ],
+
+                "detection": "IDS network scan alert",
+                "alert": "Nmap Scan Detected",
+                "host": "WORKSTATION-07",
+
+                "process_tree": [
+                    "nmap"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "Network IDS Alert",
+                    "image": "nmap",
+                    "parent_image": "bash",
+                    "command_line": "nmap -sV 10.0.0.0/24"
+                },
+
+                "question": {
+                    "text": "Best response to recon activity?",
+                    "options": [
+                        "Block Source Host",
+                        "Ignore Scan",
+                        "Disable Antivirus"
+                    ],
+                    "correct_answer": "Block Source Host",
+                    "success_message": "Recon activity blocked.",
+                    "failure_message": "Attacker mapped network."
+                }
+            }
+
+        ]
+    },
+
+    {
+        "id": 5,
+        "title": "DCSync Attack",
+        "description": "Suspicious replication request targeting domain controller.",
+        "severity": "Critical",
+
+        "timeline": [
+
+            {
+                "step": "DCSync replication request detected",
+                "mitre": "T1003.006",
+                "tactic": "Credential Access",
+
+                "tactic_options": [
+                    "Credential Access",
+                    "Discovery",
+                    "Persistence",
+                    "Collection"
+                ],
+
+                "detection": "Directory replication alert",
+                "alert": "Possible DCSync Activity",
+                "host": "DC01",
+
+                "process_tree": [
+                    "mimikatz.exe"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "Windows Event ID 4662",
+                    "image": "mimikatz.exe",
+                    "parent_image": "cmd.exe",
+                    "command_line": "lsadump::dcsync"
+                },
+
+                "question": {
+                    "text": "How should the analyst respond?",
+                    "options": [
+                        "Disable Compromised Account",
+                        "Ignore Activity",
+                        "Restart Browser"
+                    ],
+                    "correct_answer": "Disable Compromised Account",
+                    "success_message": "DCSync attack interrupted.",
+                    "failure_message": "Domain hashes dumped."
+                }
+            }
+
+        ]
+    },
+
+    {
+        "id": 6,
+        "title": "Ransomware Outbreak",
+        "description": "Mass file encryption activity spreading across hosts.",
+        "severity": "Critical",
+
+        "timeline": [
+
+            {
+                "step": "Mass encryption behavior detected",
+                "mitre": "T1486",
+                "tactic": "Impact",
+
+                "tactic_options": [
+                    "Impact",
+                    "Execution",
+                    "Discovery",
+                    "Persistence"
+                ],
+
+                "detection": "Ransomware behavior alert",
+                "alert": "Possible Ransomware Activity",
+                "host": "FILESERVER01",
+
+                "process_tree": [
+                    "encryptor.exe"
+                ],
+
+                "sysmon_log": {
+                    "event_id": "Sysmon Event ID 1",
+                    "image": "encryptor.exe",
+                    "parent_image": "powershell.exe",
+                    "command_line": "encryptor.exe /encrypt"
+                },
+
+                "question": {
+                    "text": "What is the best containment step?",
+                    "options": [
+                        "Isolate File Server",
+                        "Ignore Encryption",
+                        "Disable Logging"
+                    ],
+                    "correct_answer": "Isolate File Server",
+                    "success_message": "Ransomware contained.",
+                    "failure_message": "Multiple hosts encrypted."
+                }
+            }
+
+        ]
     }
 ]

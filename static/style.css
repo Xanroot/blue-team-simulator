@@ -233,3 +233,111 @@ a {
 .tactic-btn:hover {
     background: #2563eb;
 }
+.login-body {
+    background: #020617;
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.login-container {
+    width: 500px;
+}
+
+.terminal-header {
+    background: #111827;
+    padding: 12px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    border: 1px solid #1e293b;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.red {
+    background: #ef4444;
+}
+
+.yellow {
+    background: #facc15;
+}
+
+.green {
+    background: #22c55e;
+}
+
+.terminal-title {
+    margin-left: 10px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.login-box {
+    background: #0f172a;
+    padding: 40px;
+    border-radius: 0 0 12px 12px;
+    border: 1px solid #1e293b;
+    border-top: none;
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.15);
+}
+
+.glow-title {
+    color: #22c55e;
+    font-size: 42px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+}
+
+.login-subtitle {
+    color: #94a3b8;
+    margin-bottom: 30px;
+}
+
+.terminal-line {
+    color: #22c55e;
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+#access-key {
+    width: 100%;
+    padding: 15px;
+    background: #020617;
+    border: 1px solid #1e293b;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 15px;
+    background: #14532d;
+    border: none;
+    color: #22c55e;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    letter-spacing: 2px;
+}
+
+.login-box button:hover {
+    background: #166534;
+}
+
+#status-text {
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
