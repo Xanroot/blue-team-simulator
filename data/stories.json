@@ -1,393 +1,636 @@
 [
-    {
-        "id": 1,
-        "title": "Phishing to PowerShell Attack",
-        "description": "Malicious attachment leads to PowerShell execution and persistence.",
-        "severity": "High",
-
-        "timeline": [
-
-            {
-                "step": "User receives phishing email",
-                "mitre": "T1566",
-                "tactic": "Initial Access",
-
-                "tactic_options": [
-                    "Initial Access",
-                    "Execution",
-                    "Persistence",
-                    "Discovery"
-                ],
-
-                "detection": "Email gateway alert",
-                "alert": "Suspicious Email Attachment",
-                "host": "USER-LAPTOP01",
-
-                "process_tree": [
-                    "OUTLOOK.EXE",
-                    "WINWORD.EXE",
-                    "powershell.exe"
-                ],
-
-                "sysmon_log": {
-                    "event_id": "MDO Alert",
-                    "image": "WINWORD.EXE",
-                    "parent_image": "OUTLOOK.EXE",
-                    "command_line": "WINWORD.EXE invoice.docm"
-                },
-
-                "question": {
-                    "text": "What should the analyst do first?",
-                    "options": [
-                        "Isolate Host",
-                        "Escalate Incident",
-                        "Ignore Alert"
-                    ],
-                    "correct_answer": "Isolate Host",
-                    "success_message": "Host isolated successfully.",
-                    "failure_message": "Threat spread across network."
-                }
-            },
-
-            {
-                "step": "Word document launches PowerShell",
-                "mitre": "T1059.001",
-                "tactic": "Execution",
-
-                "tactic_options": [
-                    "Execution",
-                    "Persistence",
-                    "Credential Access",
-                    "Discovery"
-                ],
-
-                "detection": "Sysmon Event ID 1",
-                "alert": "Suspicious PowerShell Execution",
-                "host": "USER-LAPTOP01",
-
-                "process_tree": [
-                    "OUTLOOK.EXE",
-                    "WINWORD.EXE",
-                    "powershell.exe"
-                ],
-
-                "sysmon_log": {
-                    "event_id": "Sysmon Event ID 1",
-                    "image": "powershell.exe",
-                    "parent_image": "WINWORD.EXE",
-                    "command_line": "powershell.exe -enc SQBmACgA"
-                },
-
-                "question": {
-                    "text": "What is the best response?",
-                    "options": [
-                        "Block PowerShell",
-                        "Ignore Process",
-                        "Delete Browser History"
-                    ],
-                    "correct_answer": "Block PowerShell",
-                    "success_message": "Malicious process terminated.",
-                    "failure_message": "Attacker gained persistence."
-                }
-            },
-
-            {
-                "step": "Registry persistence created",
-                "mitre": "T1547",
-                "tactic": "Persistence",
-
-                "tactic_options": [
-                    "Persistence",
-                    "Discovery",
-                    "Reconnaissance",
-                    "Collection"
-                ],
-
-                "detection": "Registry modification alert",
-                "alert": "Persistence Mechanism Detected",
-                "host": "USER-LAPTOP01",
-
-                "process_tree": [
-                    "powershell.exe",
-                    "reg.exe"
-                ],
-
-                "sysmon_log": {
-                    "event_id": "Sysmon Event ID 13",
-                    "image": "reg.exe",
-                    "parent_image": "powershell.exe",
-                    "command_line": "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
-                },
-
-                "question": {
-                    "text": "How should the analyst respond?",
-                    "options": [
-                        "Remove Persistence",
-                        "Ignore Registry Change",
-                        "Shutdown SIEM"
-                    ],
-                    "correct_answer": "Remove Persistence",
-                    "success_message": "Persistence removed successfully.",
-                    "failure_message": "Threat remained active."
-                }
-            }
-
-        ]
-    },
-
-    {
-        "id": 2,
-        "title": "Privilege Escalation Incident",
-        "description": "Attacker escalates privileges using compromised credentials.",
-        "severity": "Critical",
-
-        "timeline": [
-
-            {
-                "step": "Admin group membership modified",
-                "mitre": "T1078",
-                "tactic": "Privilege Escalation",
-
-                "tactic_options": [
-                    "Privilege Escalation",
-                    "Execution",
-                    "Discovery",
-                    "Collection"
-                ],
-
-                "detection": "Windows security alert",
-                "alert": "Unauthorized Admin Access",
-                "host": "SERVER-01",
-
-                "process_tree": [
-                    "cmd.exe",
-                    "net.exe"
-                ],
-
-                "sysmon_log": {
-                    "event_id": "Windows Event ID 4728",
-                    "image": "net.exe",
-                    "parent_image": "cmd.exe",
-                    "command_line": "net localgroup administrators attacker /add"
-                },
-
-                "question": {
-                    "text": "What should be done immediately?",
-                    "options": [
-                        "Disable Account",
-                        "Ignore User",
-                        "Restart Browser"
-                    ],
-                    "correct_answer": "Disable Account",
-                    "success_message": "Privilege escalation contained.",
-                    "failure_message": "Attacker gained domain privileges."
-                }
-            }
-
-        ]
-    },
-
-    {
-        "id": 3,
-        "title": "SSH Brute Force Attack",
-        "description": "Multiple failed SSH login attempts detected.",
-        "severity": "Medium",
-
-        "timeline": [
-
-            {
-                "step": "Repeated SSH authentication failures",
-                "mitre": "T1110",
-                "tactic": "Credential Access",
-
-                "tactic_options": [
-                    "Credential Access",
-                    "Persistence",
-                    "Execution",
-                    "Impact"
-                ],
-
-                "detection": "Linux PAM alert",
-                "alert": "SSH Brute Force Detected",
-                "host": "LINUX-WEB01",
-
-                "process_tree": [
-                    "sshd"
-                ],
-
-                "sysmon_log": {
-                    "event_id": "Linux PAM Authentication Failure",
-                    "image": "sshd",
-                    "parent_image": "systemd",
-                    "command_line": "Failed password for root"
-                },
-
-                "question": {
-                    "text": "Best containment step?",
-                    "options": [
-                        "Block Source IP",
-                        "Ignore Attempts",
-                        "Disable Firewall"
-                    ],
-                    "correct_answer": "Block Source IP",
-                    "success_message": "Brute-force attack blocked.",
-                    "failure_message": "Attacker continued attempts."
-                }
-            }
-
-        ]
-    },
-
-    {
-        "id": 4,
-        "title": "Kali Linux Recon Activity",
-        "description": "Reconnaissance activity detected from attacker machine.",
-        "severity": "High",
-
-        "timeline": [
-
-            {
-                "step": "Network scan detected",
-                "mitre": "T1046",
-                "tactic": "Discovery",
-
-                "tactic_options": [
-                    "Discovery",
-                    "Execution",
-                    "Persistence",
-                    "Impact"
-                ],
-
-                "detection": "IDS network scan alert",
-                "alert": "Nmap Scan Detected",
-                "host": "WORKSTATION-07",
-
-                "process_tree": [
-                    "nmap"
-                ],
-
-                "sysmon_log": {
-                    "event_id": "Network IDS Alert",
-                    "image": "nmap",
-                    "parent_image": "bash",
-                    "command_line": "nmap -sV 10.0.0.0/24"
-                },
-
-                "question": {
-                    "text": "Best response to recon activity?",
-                    "options": [
-                        "Block Source Host",
-                        "Ignore Scan",
-                        "Disable Antivirus"
-                    ],
-                    "correct_answer": "Block Source Host",
-                    "success_message": "Recon activity blocked.",
-                    "failure_message": "Attacker mapped network."
-                }
-            }
-
-        ]
-    },
-
-    {
-        "id": 5,
-        "title": "DCSync Attack",
-        "description": "Suspicious replication request targeting domain controller.",
-        "severity": "Critical",
-
-        "timeline": [
-
-            {
-                "step": "DCSync replication request detected",
-                "mitre": "T1003.006",
-                "tactic": "Credential Access",
-
-                "tactic_options": [
-                    "Credential Access",
-                    "Discovery",
-                    "Persistence",
-                    "Collection"
-                ],
-
-                "detection": "Directory replication alert",
-                "alert": "Possible DCSync Activity",
-                "host": "DC01",
-
-                "process_tree": [
-                    "mimikatz.exe"
-                ],
-
-                "sysmon_log": {
-                    "event_id": "Windows Event ID 4662",
-                    "image": "mimikatz.exe",
-                    "parent_image": "cmd.exe",
-                    "command_line": "lsadump::dcsync"
-                },
-
-                "question": {
-                    "text": "How should the analyst respond?",
-                    "options": [
-                        "Disable Compromised Account",
-                        "Ignore Activity",
-                        "Restart Browser"
-                    ],
-                    "correct_answer": "Disable Compromised Account",
-                    "success_message": "DCSync attack interrupted.",
-                    "failure_message": "Domain hashes dumped."
-                }
-            }
-
-        ]
-    },
-
-    {
-        "id": 6,
-        "title": "Ransomware Outbreak",
-        "description": "Mass file encryption activity spreading across hosts.",
-        "severity": "Critical",
-
-        "timeline": [
-
-            {
-                "step": "Mass encryption behavior detected",
-                "mitre": "T1486",
-                "tactic": "Impact",
-
-                "tactic_options": [
-                    "Impact",
-                    "Execution",
-                    "Discovery",
-                    "Persistence"
-                ],
-
-                "detection": "Ransomware behavior alert",
-                "alert": "Possible Ransomware Activity",
-                "host": "FILESERVER01",
-
-                "process_tree": [
-                    "encryptor.exe"
-                ],
-
-                "sysmon_log": {
-                    "event_id": "Sysmon Event ID 1",
-                    "image": "encryptor.exe",
-                    "parent_image": "powershell.exe",
-                    "command_line": "encryptor.exe /encrypt"
-                },
-
-                "question": {
-                    "text": "What is the best containment step?",
-                    "options": [
-                        "Isolate File Server",
-                        "Ignore Encryption",
-                        "Disable Logging"
-                    ],
-                    "correct_answer": "Isolate File Server",
-                    "success_message": "Ransomware contained.",
-                    "failure_message": "Multiple hosts encrypted."
-                }
-            }
-
-        ]
-    }
+  {
+    "id": 1,
+    "title": "Phishing to PowerShell Attack",
+    "description": "Malicious attachment leads to PowerShell execution and persistence.",
+    "severity": "High",
+
+    "timeline": [
+
+      {
+        "step": "User receives phishing email",
+        "mitre": "T1566",
+        "tactic": "Initial Access",
+
+        "tactic_options": [
+          "Initial Access",
+          "Execution",
+          "Persistence",
+          "Discovery"
+        ],
+
+        "detection": "Email gateway alert",
+        "alert": "Suspicious Email Attachment",
+        "host": "USER-LAPTOP01",
+
+        "process_tree": [
+          "OUTLOOK.EXE",
+          "WINWORD.EXE"
+        ],
+
+        "sysmon_log": {
+          "event_id": "MDO Alert",
+          "image": "WINWORD.EXE",
+          "parent_image": "OUTLOOK.EXE",
+          "command_line": "WINWORD.EXE invoice.docm"
+        },
+
+        "question": {
+          "text": "What should the analyst do first?",
+          "options": [
+            "Isolate Host",
+            "Ignore Alert",
+            "Delete Logs"
+          ],
+          "correct_answer": "Isolate Host",
+          "success_message": "Host isolated successfully.",
+          "failure_message": "Threat spread across network."
+        }
+      },
+
+      {
+        "step": "Word document launches PowerShell",
+        "mitre": "T1059.001",
+        "tactic": "Execution",
+
+        "tactic_options": [
+          "Execution",
+          "Persistence",
+          "Discovery",
+          "Impact"
+        ],
+
+        "detection": "Sysmon Event ID 1",
+        "alert": "Suspicious PowerShell Execution",
+        "host": "USER-LAPTOP01",
+
+        "process_tree": [
+          "WINWORD.EXE",
+          "powershell.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Sysmon Event ID 1",
+          "image": "powershell.exe",
+          "parent_image": "WINWORD.EXE",
+          "command_line": "powershell.exe -enc SQBmACgA"
+        },
+
+        "question": {
+          "text": "What is the best response?",
+          "options": [
+            "Block PowerShell",
+            "Ignore Process",
+            "Disable Defender"
+          ],
+          "correct_answer": "Block PowerShell",
+          "success_message": "Malicious process terminated.",
+          "failure_message": "Attacker gained persistence."
+        }
+      },
+
+      {
+        "step": "Registry persistence created",
+        "mitre": "T1547",
+        "tactic": "Persistence",
+
+        "tactic_options": [
+          "Persistence",
+          "Discovery",
+          "Reconnaissance",
+          "Collection"
+        ],
+
+        "detection": "Registry modification alert",
+        "alert": "Persistence Mechanism Detected",
+        "host": "USER-LAPTOP01",
+
+        "process_tree": [
+          "powershell.exe",
+          "reg.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Sysmon Event ID 13",
+          "image": "reg.exe",
+          "parent_image": "powershell.exe",
+          "command_line": "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+        },
+
+        "question": {
+          "text": "How should the analyst respond?",
+          "options": [
+            "Remove Persistence",
+            "Ignore Registry Change",
+            "Shutdown SIEM"
+          ],
+          "correct_answer": "Remove Persistence",
+          "success_message": "Persistence removed successfully.",
+          "failure_message": "Threat remained active."
+        }
+      }
+
+    ]
+  },
+
+  {
+    "id": 2,
+    "title": "Privilege Escalation Incident",
+    "description": "Attacker escalates privileges using compromised credentials.",
+    "severity": "Critical",
+
+    "timeline": [
+
+      {
+        "step": "Suspicious admin login detected",
+        "mitre": "T1078",
+        "tactic": "Valid Accounts",
+
+        "tactic_options": [
+          "Valid Accounts",
+          "Discovery",
+          "Collection",
+          "Impact"
+        ],
+
+        "detection": "Windows login alert",
+        "alert": "Unusual Admin Login",
+        "host": "SERVER-01",
+
+        "process_tree": [
+          "winlogon.exe",
+          "explorer.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Windows Event ID 4624",
+          "image": "explorer.exe",
+          "parent_image": "winlogon.exe",
+          "command_line": "Admin session established"
+        },
+
+        "question": {
+          "text": "What should the analyst verify?",
+          "options": [
+            "Review Login Source",
+            "Ignore Login",
+            "Disable Logging"
+          ],
+          "correct_answer": "Review Login Source",
+          "success_message": "Suspicious login identified.",
+          "failure_message": "Attacker remained undetected."
+        }
+      },
+
+      {
+        "step": "Admin group membership modified",
+        "mitre": "T1078",
+        "tactic": "Privilege Escalation",
+
+        "tactic_options": [
+          "Privilege Escalation",
+          "Execution",
+          "Discovery",
+          "Collection"
+        ],
+
+        "detection": "Windows security alert",
+        "alert": "Unauthorized Admin Access",
+        "host": "SERVER-01",
+
+        "process_tree": [
+          "cmd.exe",
+          "net.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Windows Event ID 4728",
+          "image": "net.exe",
+          "parent_image": "cmd.exe",
+          "command_line": "net localgroup administrators attacker /add"
+        },
+
+        "question": {
+          "text": "What should be done immediately?",
+          "options": [
+            "Disable Account",
+            "Ignore User",
+            "Restart Browser"
+          ],
+          "correct_answer": "Disable Account",
+          "success_message": "Privilege escalation contained.",
+          "failure_message": "Attacker gained domain privileges."
+        }
+      }
+
+    ]
+  },
+
+  {
+    "id": 3,
+    "title": "SSH Brute Force Attack",
+    "description": "Multiple failed SSH login attempts detected.",
+    "severity": "Medium",
+
+    "timeline": [
+
+      {
+        "step": "Repeated SSH authentication failures",
+        "mitre": "T1110",
+        "tactic": "Credential Access",
+
+        "tactic_options": [
+          "Credential Access",
+          "Persistence",
+          "Execution",
+          "Impact"
+        ],
+
+        "detection": "Linux PAM alert",
+        "alert": "SSH Brute Force Detected",
+        "host": "LINUX-WEB01",
+
+        "process_tree": [
+          "sshd"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Linux PAM Authentication Failure",
+          "image": "sshd",
+          "parent_image": "systemd",
+          "command_line": "Failed password for root"
+        },
+
+        "question": {
+          "text": "Best containment step?",
+          "options": [
+            "Block Source IP",
+            "Ignore Attempts",
+            "Disable Firewall"
+          ],
+          "correct_answer": "Block Source IP",
+          "success_message": "Brute-force attack blocked.",
+          "failure_message": "Attacker continued attempts."
+        }
+      },
+
+      {
+        "step": "Successful root login detected",
+        "mitre": "T1078",
+        "tactic": "Persistence",
+
+        "tactic_options": [
+          "Persistence",
+          "Discovery",
+          "Impact",
+          "Collection"
+        ],
+
+        "detection": "Successful SSH login",
+        "alert": "Unauthorized Root Access",
+        "host": "LINUX-WEB01",
+
+        "process_tree": [
+          "sshd",
+          "bash"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Linux Auth Success",
+          "image": "bash",
+          "parent_image": "sshd",
+          "command_line": "root session started"
+        },
+
+        "question": {
+          "text": "What should be done next?",
+          "options": [
+            "Terminate Session",
+            "Ignore Login",
+            "Disable SIEM"
+          ],
+          "correct_answer": "Terminate Session",
+          "success_message": "Unauthorized access terminated.",
+          "failure_message": "Attacker maintained persistence."
+        }
+      }
+
+    ]
+  },
+
+  {
+    "id": 4,
+    "title": "Kali Linux Recon Activity",
+    "description": "Reconnaissance activity detected from attacker machine.",
+    "severity": "High",
+
+    "timeline": [
+
+      {
+        "step": "Network scan detected",
+        "mitre": "T1046",
+        "tactic": "Discovery",
+
+        "tactic_options": [
+          "Discovery",
+          "Execution",
+          "Persistence",
+          "Impact"
+        ],
+
+        "detection": "IDS network scan alert",
+        "alert": "Nmap Scan Detected",
+        "host": "WORKSTATION-07",
+
+        "process_tree": [
+          "nmap"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Network IDS Alert",
+          "image": "nmap",
+          "parent_image": "bash",
+          "command_line": "nmap -sV 10.0.0.0/24"
+        },
+
+        "question": {
+          "text": "Best response to recon activity?",
+          "options": [
+            "Block Source Host",
+            "Ignore Scan",
+            "Disable Antivirus"
+          ],
+          "correct_answer": "Block Source Host",
+          "success_message": "Recon activity blocked.",
+          "failure_message": "Attacker mapped network."
+        }
+      },
+
+      {
+        "step": "Suspicious SMB enumeration activity",
+        "mitre": "T1135",
+        "tactic": "Discovery",
+
+        "tactic_options": [
+          "Discovery",
+          "Execution",
+          "Persistence",
+          "Impact"
+        ],
+
+        "detection": "SMB enumeration alert",
+        "alert": "File Share Enumeration",
+        "host": "FILESERVER01",
+
+        "process_tree": [
+          "smbclient"
+        ],
+
+        "sysmon_log": {
+          "event_id": "SMB Enumeration",
+          "image": "smbclient",
+          "parent_image": "bash",
+          "command_line": "smbclient -L //10.0.0.5"
+        },
+
+        "question": {
+          "text": "How should the analyst respond?",
+          "options": [
+            "Restrict SMB Access",
+            "Ignore Enumeration",
+            "Disable Logs"
+          ],
+          "correct_answer": "Restrict SMB Access",
+          "success_message": "Recon activity disrupted.",
+          "failure_message": "Attacker discovered file shares."
+        }
+      }
+
+    ]
+  },
+
+  {
+    "id": 5,
+    "title": "DCSync Attack",
+    "description": "Suspicious replication request targeting domain controller.",
+    "severity": "Critical",
+
+    "timeline": [
+
+      {
+        "step": "PowerShell credential dumping attempt",
+        "mitre": "T1003",
+        "tactic": "Credential Access",
+
+        "tactic_options": [
+          "Credential Access",
+          "Discovery",
+          "Persistence",
+          "Collection"
+        ],
+
+        "detection": "Credential dumping alert",
+        "alert": "LSASS Access Attempt",
+        "host": "DC01",
+
+        "process_tree": [
+          "powershell.exe",
+          "mimikatz.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Sysmon Event ID 10",
+          "image": "mimikatz.exe",
+          "parent_image": "powershell.exe",
+          "command_line": "sekurlsa::logonpasswords"
+        },
+
+        "question": {
+          "text": "What is the immediate response?",
+          "options": [
+            "Terminate Process",
+            "Ignore Alert",
+            "Disable Defender"
+          ],
+          "correct_answer": "Terminate Process",
+          "success_message": "Credential dumping interrupted.",
+          "failure_message": "Attacker extracted credentials."
+        }
+      },
+
+      {
+        "step": "DCSync replication request detected",
+        "mitre": "T1003.006",
+        "tactic": "Credential Access",
+
+        "tactic_options": [
+          "Credential Access",
+          "Discovery",
+          "Persistence",
+          "Collection"
+        ],
+
+        "detection": "Directory replication alert",
+        "alert": "Possible DCSync Activity",
+        "host": "DC01",
+
+        "process_tree": [
+          "mimikatz.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Windows Event ID 4662",
+          "image": "mimikatz.exe",
+          "parent_image": "cmd.exe",
+          "command_line": "lsadump::dcsync"
+        },
+
+        "question": {
+          "text": "How should the analyst respond?",
+          "options": [
+            "Disable Compromised Account",
+            "Ignore Activity",
+            "Restart Browser"
+          ],
+          "correct_answer": "Disable Compromised Account",
+          "success_message": "DCSync attack interrupted.",
+          "failure_message": "Domain hashes dumped."
+        }
+      }
+
+    ]
+  },
+
+  {
+    "id": 6,
+    "title": "Ransomware Outbreak",
+    "description": "Mass file encryption activity spreading across hosts.",
+    "severity": "Critical",
+
+    "timeline": [
+
+      {
+        "step": "Malicious payload execution detected",
+        "mitre": "T1204",
+        "tactic": "Execution",
+
+        "tactic_options": [
+          "Execution",
+          "Discovery",
+          "Persistence",
+          "Collection"
+        ],
+
+        "detection": "Malware execution alert",
+        "alert": "Suspicious Executable Launched",
+        "host": "FILESERVER01",
+
+        "process_tree": [
+          "powershell.exe",
+          "encryptor.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Sysmon Event ID 1",
+          "image": "encryptor.exe",
+          "parent_image": "powershell.exe",
+          "command_line": "encryptor.exe /silent"
+        },
+
+        "question": {
+          "text": "Best initial containment step?",
+          "options": [
+            "Kill Process",
+            "Ignore Alert",
+            "Disable EDR"
+          ],
+          "correct_answer": "Kill Process",
+          "success_message": "Payload execution interrupted.",
+          "failure_message": "Malware continued execution."
+        }
+      },
+
+      {
+        "step": "SMB lateral movement detected",
+        "mitre": "T1021.002",
+        "tactic": "Lateral Movement",
+
+        "tactic_options": [
+          "Lateral Movement",
+          "Execution",
+          "Persistence",
+          "Discovery"
+        ],
+
+        "detection": "SMB spread alert",
+        "alert": "Ransomware Spreading Across Hosts",
+        "host": "FILESERVER01",
+
+        "process_tree": [
+          "encryptor.exe",
+          "wmic.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "SMB Propagation Alert",
+          "image": "wmic.exe",
+          "parent_image": "encryptor.exe",
+          "command_line": "wmic process call create encryptor.exe"
+        },
+
+        "question": {
+          "text": "How should the analyst respond?",
+          "options": [
+            "Isolate File Server",
+            "Ignore Spread",
+            "Disable Firewall"
+          ],
+          "correct_answer": "Isolate File Server",
+          "success_message": "Lateral movement contained.",
+          "failure_message": "Additional hosts encrypted."
+        }
+      },
+
+      {
+        "step": "Mass encryption behavior detected",
+        "mitre": "T1486",
+        "tactic": "Impact",
+
+        "tactic_options": [
+          "Impact",
+          "Execution",
+          "Discovery",
+          "Persistence"
+        ],
+
+        "detection": "Ransomware behavior alert",
+        "alert": "Mass File Encryption Detected",
+        "host": "FILESERVER01",
+
+        "process_tree": [
+          "encryptor.exe"
+        ],
+
+        "sysmon_log": {
+          "event_id": "Sysmon Event ID 1",
+          "image": "encryptor.exe",
+          "parent_image": "powershell.exe",
+          "command_line": "encryptor.exe /encrypt"
+        },
+
+        "question": {
+          "text": "What is the best final response?",
+          "options": [
+            "Initiate IR Plan",
+            "Ignore Encryption",
+            "Delete Logs"
+          ],
+          "correct_answer": "Initiate IR Plan",
+          "success_message": "Ransomware response initiated.",
+          "failure_message": "Enterprise-wide encryption occurred."
+        }
+      }
+
+    ]
+  }
 ]
