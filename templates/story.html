@@ -75,10 +75,27 @@
         {{ item.mitre }}
     </p>
 
-    <p>
-        <strong>Tactic:</strong>
-        {{ item.tactic }}
-    </p>
+    <div class="mitre-challenge">
+
+        <h4>🎯 Guess the MITRE Tactic</h4>
+
+        {% for tactic in item.tactic_options %}
+
+            <button
+                class="tactic-btn"
+                onclick="checkTactic(
+                    this,
+                    '{{ tactic }}',
+                    '{{ item.tactic }}'
+                )">
+
+                {{ tactic }}
+
+            </button>
+
+        {% endfor %}
+
+    </div>
 
     <p>
         <strong>Detection:</strong>
@@ -349,6 +366,54 @@ function checkIncidentOutcome() {
 
         outcome.style.display =
             "none";
+
+    }
+
+}
+
+function checkTactic(
+    button,
+    selected,
+    correct
+) {
+
+    if (selected === correct) {
+
+        button.style.backgroundColor =
+            "green";
+
+        xp += 10;
+
+        localStorage.setItem(
+            "soc_xp",
+            xp
+        );
+
+        document.getElementById("xp").innerText =
+            xp;
+
+        updateRank();
+
+        alert(
+            "✅ Correct MITRE Tactic\n\n" +
+            "+10 XP"
+        );
+
+    }
+
+    else {
+
+        button.style.backgroundColor =
+            "red";
+
+        threatScore += 5;
+
+        updateThreatScore();
+
+        alert(
+            "❌ Incorrect Tactic\n\n" +
+            "Correct Answer: " + correct
+        );
 
     }
 
