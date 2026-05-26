@@ -1,28 +1,77 @@
 body {
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     background: #0f172a;
     color: white;
     padding: 30px;
 }
 
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.dashboard-card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    transition: 0.3s;
+    border-left: 5px solid #38bdf8;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-card h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #38bdf8;
+}
+
+.dashboard-card p {
+    color: #cbd5e1;
+    font-size: 15px;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
 .top-bar {
     display: flex;
     gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 #xp-box,
-#rank-box {
+#rank-box,
+#threat-box {
     background: #1e293b;
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: bold;
 }
+
+#threat-box {
+    border-left: 4px solid #ef4444;
+}
+
+/* =========================
+   CARDS
+========================= */
 
 .card {
     background: #1e293b;
     padding: 20px;
     margin-bottom: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     transition: 0.3s;
 }
 
@@ -32,62 +81,126 @@ body {
 
 .timeline-card {
     background: #1e293b;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-left: 5px solid #60a5fa;
-    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-left: 5px solid #38bdf8;
+    border-radius: 12px;
 }
+
+/* =========================
+   ALERTS
+========================= */
 
 .alert-box {
     background: #7f1d1d;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
     border-left: 5px solid red;
 }
 
-.process-tree {
-    background: #111827;
+.critical-badge {
+    background: #991b1b;
+    color: white;
     padding: 10px;
     border-radius: 8px;
-    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+    border-left: 5px solid red;
+}
+
+/* =========================
+   PROCESS TREE
+========================= */
+
+.process-tree {
+    background: #111827;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
 }
 
 .process-item {
     margin-left: 20px;
-    color: #93c5fd;
+    color: #7dd3fc;
     font-family: monospace;
 }
 
+/* =========================
+   LOGS
+========================= */
+
 .log-box {
     background: #172554;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
     border-left: 5px solid #3b82f6;
 }
 
+/* =========================
+   QUIZ
+========================= */
+
 .quiz-box {
-    background: #1e293b;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 15px;
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
 }
+
+/* =========================
+   MITRE CHALLENGE
+========================= */
+
+.mitre-challenge {
+    background: #0f172a;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.tactic-btn {
+    background: #1d4ed8;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tactic-btn:hover {
+    background: #2563eb;
+}
+
+/* =========================
+   BUTTONS
+========================= */
 
 button {
     background: #334155;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 10px 15px;
     margin-right: 10px;
     margin-top: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
     background: #475569;
 }
+
+/* =========================
+   SEVERITY
+========================= */
 
 .severity {
     padding: 5px 10px;
@@ -107,15 +220,14 @@ button:hover {
     background: #2563eb;
 }
 
-a {
-    color: #60a5fa;
-    text-decoration: none;
+.Critical {
+    background: #991b1b;
 }
-#threat-box {
-    background: #7f1d1d;
-    padding: 10px 20px;
-    border-radius: 8px;
-}
+
+/* =========================
+   INCIDENT OUTCOME
+========================= */
+
 #incident-outcome {
     display: none;
     background: #7f1d1d;
@@ -127,10 +239,14 @@ a {
     font-size: 18px;
 }
 
+/* =========================
+   CAREER SYSTEM
+========================= */
+
 .career-box {
     background: #1e293b;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-top: 40px;
 }
 
@@ -140,10 +256,15 @@ a {
     border-radius: 8px;
     margin-top: 10px;
 }
+
+/* =========================
+   CASES
+========================= */
+
 .unlock-info {
     background: #172554;
     padding: 15px;
-    border-radius: 8px;
+    border-radius: 10px;
     margin-bottom: 20px;
 }
 
@@ -170,87 +291,33 @@ a {
 .locked-btn:hover {
     background: #64748b;
 }
-.dashboard {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
-}
 
-.dashboard-card {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    transition: 0.3s;
-    border-left: 5px solid #3b82f6;
-}
+/* =========================
+   LOGIN PAGE
+========================= */
 
-.dashboard-card:hover {
-    transform: translateY(-5px);
-}
-
-.dashboard-card h2 {
-    font-size: 32px;
-    margin-bottom: 10px;
-    color: #60a5fa;
-}
-
-.dashboard-card p {
-    color: #cbd5e1;
-    font-size: 15px;
-}
-.critical-badge {
-    background: #991b1b;
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: bold;
-    margin-top: 15px;
-    border-left: 5px solid red;
-}
-.mitre-challenge {
-    background: #0f172a;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.tactic-btn {
-    background: #1e40af;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin-right: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.tactic-btn:hover {
-    background: #2563eb;
-}
 .login-body {
-    background: #020617;
+    background: linear-gradient(
+        to bottom right,
+        #020617,
+        #0f172a
+    );
+
     color: white;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Arial, sans-serif;
 }
 
 .login-container {
-    width: 500px;
+    width: 520px;
 }
 
 .terminal-header {
     background: #111827;
     padding: 12px;
-    border-radius: 12px 12px 0 0;
+    border-radius: 14px 14px 0 0;
     display: flex;
     align-items: center;
     border: 1px solid #1e293b;
@@ -263,16 +330,16 @@ a {
     margin-right: 8px;
 }
 
-.red {
-    background: #ef4444;
-}
-
-.yellow {
-    background: #facc15;
+.blue {
+    background: #3b82f6;
 }
 
 .green {
     background: #22c55e;
+}
+
+.cyan {
+    background: #06b6d4;
 }
 
 .terminal-title {
@@ -284,17 +351,29 @@ a {
 .login-box {
     background: #0f172a;
     padding: 40px;
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 0 14px 14px;
     border: 1px solid #1e293b;
     border-top: none;
-    box-shadow: 0 0 25px rgba(34, 197, 94, 0.15);
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.15);
+}
+
+.soc-badge {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 14px;
+    letter-spacing: 1px;
 }
 
 .glow-title {
-    color: #22c55e;
+    color: #38bdf8;
     font-size: 42px;
     margin-bottom: 10px;
-    text-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+    text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
 }
 
 .login-subtitle {
@@ -303,9 +382,15 @@ a {
 }
 
 .terminal-line {
-    color: #22c55e;
+    color: #38bdf8;
     margin-bottom: 15px;
     font-size: 15px;
+}
+
+.terminal-line-small {
+    color: #64748b;
+    margin-bottom: 25px;
+    font-size: 13px;
 }
 
 #access-key {
@@ -322,22 +407,65 @@ a {
 .login-box button {
     width: 100%;
     padding: 15px;
-    background: #14532d;
-    border: none;
-    color: #22c55e;
-    font-size: 16px;
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    color: #38bdf8;
+    font-size: 15px;
     border-radius: 10px;
     cursor: pointer;
     transition: 0.3s;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 .login-box button:hover {
-    background: #166534;
+    background: #111827;
+    border-color: #38bdf8;
+}
+
+.demo-access {
+    margin-top: 20px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.demo-access span {
+    color: #22c55e;
+    font-weight: bold;
 }
 
 #status-text {
     margin-top: 20px;
     text-align: center;
     font-weight: bold;
+}
+
+/* =========================
+   EXIT BUTTON
+========================= */
+
+.soc-exit-btn {
+    display: inline-block;
+    margin-top: 30px;
+    background: #0f172a;
+    color: #38bdf8;
+    padding: 12px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 1px solid #1e293b;
+    transition: 0.3s;
+}
+
+.soc-exit-btn:hover {
+    background: #111827;
+    color: #7dd3fc;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+a {
+    color: #60a5fa;
+    text-decoration: none;
 }

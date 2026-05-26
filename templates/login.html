@@ -16,19 +16,25 @@
 
     <div class="terminal-header">
 
-        <span class="dot red"></span>
-        <span class="dot yellow"></span>
+        <span class="dot blue"></span>
         <span class="dot green"></span>
+        <span class="dot cyan"></span>
 
         <span class="terminal-title">
 
-            blue_team_access.sh
+            soc_defender_console.sh
 
         </span>
 
     </div>
 
     <div class="login-box">
+
+        <div class="soc-badge">
+
+            🛡 BLUE TEAM OPERATIONS
+
+        </div>
 
         <h1 class="glow-title">
 
@@ -38,33 +44,39 @@
 
         <p class="login-subtitle">
 
-            SOC Access Terminal
+            SOC Investigation & MITRE ATT&CK Simulation Platform
 
         </p>
 
         <div class="terminal-line">
 
-            > ENTER ANALYST ACCESS KEY
+            > SECURITY OPERATIONS ACCESS REQUIRED
+
+        </div>
+
+        <div class="terminal-line-small">
+
+            Threat Monitoring • Incident Response • Threat Hunting
 
         </div>
 
         <input
             type="password"
             id="access-key"
-            placeholder="••••••••••••">
+            placeholder="ENTER ANALYST ACCESS KEY">
 
         <button onclick="authenticate()">
 
-            AUTHENTICATE
+            ENTER SOC CONSOLE
 
         </button>
 
         <p class="demo-access">
 
-    Demo Access Key:
-    <span>blue-team</span>
+            Demo Access Key:
+            <span>blue-team</span>
 
-</p>
+        </p>
 
         <p id="status-text"></p>
 
@@ -96,9 +108,10 @@ function authenticate() {
 
         setTimeout(() => {
 
-            window.location.href = "/dashboard";
+            window.location.href =
+                "/dashboard";
 
-        }, 1500);
+        }, 1200);
 
     }
 
